@@ -3,7 +3,7 @@ client = bigquery.Client()
 
 
 query = (
-    "SELECT timestamp FROM `bigquery-public-data.crypto_bitcoin.blocks` ORDER BY timestamp ASC"
+    "SELECT timestamp FROM `bigquery-public-data.crypto_bitcoin.blocks` ORDER BY timestamp ASC LIMIT 10"
 )
 query_job = client.query(
     query,
@@ -12,6 +12,4 @@ query_job = client.query(
 )  # API request - starts the query
 
 for row in query_job:  # API request - fetches results
-    # Row values can be accessed by field name or index
-    assert row[0] == row.name == row["name"]
     print(row)
