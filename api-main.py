@@ -20,7 +20,7 @@ def call(req):
 
 def buildCall(t, h):
     try:
-        endpoint = 'https://blockchain.info/'+type+'/'+h
+        endpoint = 'https://blockchain.info/'+t+'/'+h
         res = call(endpoint)
         return res
     except Exception as e:
@@ -29,23 +29,32 @@ def buildCall(t, h):
 def parseBlock():
     pass
 
-def parseTransaction():
+def parseTransaction(transactions):
     pass
 
 def parseAddress():
     pass
 
-def track(h):
+def trackTransaction(h):
     # parse the transaction for all input and all output
     res = buildCall('rawtx', h)
 
-    if type(res)!==str:
-        print(type(res))
+    if type(res)!=str:
+        ti = parseTransaction(res['inputs'])
+	to = parseTransaction(res['out'])
+	
+	print(type(res))
         print(res)
+	print('popo\n')
+	print(json.dumps(res['inputs'], indent=2))
+	print(json.dumps(res['out'], indent=2))
     else:
         print('failed to call', res)
-
-
+	
+def makeTree(h):
+pass
 
 h = "de1feb1a1d89f59dd2f6b7f0abe012cd141180b93ec56fcbe437936ad679061b"
-track(h)
+makeTree(h)
+
+
