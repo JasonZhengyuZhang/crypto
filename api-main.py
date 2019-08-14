@@ -63,10 +63,29 @@ def parseTransaction(transaction):
 
     return res
 
+class LinkedList:
+    def __init__(self, val):
+        self.val = data
+        self.next = None
+        self.prev = None
+
 def trackAddress(h, maxTraverse = 0, fullResult = [], t = 'rawaddr'):
     res = buildCall(t, h)
     transactions = res['txs']
     numTrans = len(transactions)
+
+    tUpper=[]
+    tLower=[]
+
+    for tx in transactions:
+        time = tx['time']
+        txHash = tx['hash']
+
+        for txI in tx['inputs']:
+            pass
+
+        for txO in tx['out']:
+            pass
 
     ti=[]
     to=[]
@@ -84,7 +103,20 @@ def trackAddress(h, maxTraverse = 0, fullResult = [], t = 'rawaddr'):
     else:
         return trackAddress(h, maxTraverse-1)   
 
-h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
-tempRes=trackAddress(h)
+# h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
+# tempRes=trackAddress(h)
+# print(tempRes, len(tempRes))
 
-print(tempRes, len(tempRes))
+res = buildCall('rawblock', '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f')
+
+temp = 0
+
+while len(res['next_block'])>0 or  temp > 50:
+    nextB = res['next_block']
+    
+    res = buildCall('rawblock', nextB)
+
+
+    print(nextB)
+    print(temp)
+    temp+=1
