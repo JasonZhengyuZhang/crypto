@@ -56,21 +56,24 @@ def parseTransaction(transaction):
     res = {}
 
     for item in transaction:
-        res['addr']=item['addr']
+        try:
+            res['out_addr']=item['prev_out']['addr']
+        except:
+            res['out_addr']=''
 
     return res
 
 def trackAddress(h, maxTraverse = 0, fullResult = [], t = 'rawaddr'):
     res = buildCall(t, h)
     transactions = res['txs']
-    numTrans = transactions.length
+    numTrans = len(transactions)
 
     ti=[]
     to=[]
 
     for index, item in enumerate(res['txs']):
-        ti.append(parseTransaction(res['inputs']))
-        to.append(parseTransaction(res['out']))
+        ti.append(parseTransaction(item['inputs']))
+        to.append(parseTransaction(item['out']))
         print(h, index, numTrans)
 
     fullResult.append(ti)
