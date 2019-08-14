@@ -111,12 +111,14 @@ res = buildCall('rawblock', '000000000019d6689c085ae165831e934ff763ae46a2a6c172b
 
 temp = 0
 
-while len(res['next_block'])>0 or  temp > 50:
-    nextB = res['next_block']
+while len(res['next_block'])>0 or  temp < 50:
+    nextB = res['next_block'][0]
     
     res = buildCall('rawblock', nextB)
 
 
     print(nextB)
+    print(res['n_tx'])
+    print(len(res['tx']))
     print(temp)
     temp+=1
