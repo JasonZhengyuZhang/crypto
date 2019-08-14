@@ -1,5 +1,7 @@
 import requests
 import json
+from anytree import Node, RenderTree
+
 
 bitpay = [
     "https://insight.bitpay.com/api/address/1KEkZ1LXj4VpohS6ZN1tHouW8r9yja5gbP",
@@ -13,6 +15,24 @@ blockchain = [
     "https://blockchain.info/rawaddr/1AJbsFZ64EpEfS5UAjAfcUG8pH8Jn3rn1F"
 ]
 
+# def trackTransaction(t, h):
+#     # parse the transaction for all input and all output
+#     res = buildCall('rawtx', h)
+
+
+#     if type(res)!=str:
+#         ti = parseTransaction(res['inputs'])
+#         to = parseTransaction(res['out'])
+        
+#         print(type(res))
+#         print(res)
+#         print('popo\n')
+#         print(json.dumps(res['inputs'], indent=2))
+#         print(json.dumps(res['out'], indent=2))
+#     else:
+#         print('failed to call', res)
+#         return 
+    
 def call(req):
     response = requests.get(req)
     print(req, response.status_code)
@@ -29,32 +49,39 @@ def buildCall(t, h):
 def parseBlock():
     pass
 
-def parseTransaction(transactions):
-    pass
-
 def parseAddress():
     pass
 
-def trackTransaction(h):
-    # parse the transaction for all input and all output
-    res = buildCall('rawtx', h)
+def parseTransaction(transaction):
+    res = {}
 
-    if type(res)!=str:
-        ti = parseTransaction(res['inputs'])
-	to = parseTransaction(res['out'])
-	
-	print(type(res))
-        print(res)
-	print('popo\n')
-	print(json.dumps(res['inputs'], indent=2))
-	print(json.dumps(res['out'], indent=2))
+    for item in transaction:
+        res['addr']=item['addr']
+
+    return res
+
+def trackAddress(h, maxTraverse = 0, fullResult = [], t = 'rawaddr'):
+    res = buildCall(t, h)
+    transactions = res['txs']
+    numTrans = transactions.length
+
+    ti=[]
+    to=[]
+
+    for index, item in enumerate(res['txs']):
+        ti.append(parseTransaction(res['inputs']))
+        to.append(parseTransaction(res['out']))
+        print(h, index, numTrans)
+
+    fullResult.append(ti)
+    fullResult.append(to)
+
+    if maxTraverse<=0:
+        return fullResult
     else:
-        print('failed to call', res)
-	
-def makeTree(h):
-pass
+        return trackAddress(h, maxTraverse-1)   
 
-h = "de1feb1a1d89f59dd2f6b7f0abe012cd141180b93ec56fcbe437936ad679061b"
-makeTree(h)
+h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
+tempRes=trackAddress(h)
 
-
+print(tempRes, len(tempRes))
