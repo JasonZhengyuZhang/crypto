@@ -107,12 +107,12 @@ def trackAddress(h, maxTraverse = 0, fullResult = [], t = 'rawaddr'):
 # tempRes=trackAddress(h)
 # print(tempRes, len(tempRes))
 
-res = buildCall('rawblock', '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f')
+res = buildCall('rawblock', '000000000000000000123416369bded17411745b6bb42dcdf8d9b51cb414386c')
 
 temp = 0
 
-while len(res['next_block'])>0 or  temp < 50:
-    nextB = res['next_block'][0]
+while  temp < 50:
+    nextB = res['prev_block']
     
     res = buildCall('rawblock', nextB)
 
