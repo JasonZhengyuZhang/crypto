@@ -49,6 +49,23 @@ def buildCall(t, h):
 def parseBlock():
     pass
 
+def fetchAllBlock():
+    res = buildCall('rawblock', '000000000000000000123416369bded17411745b6bb42dcdf8d9b51cb414386c')
+    #80seconds for 50 things
+    temp = 0
+
+    while  temp < 50:
+        nextB = res['prev_block']
+        
+        res = buildCall('rawblock', nextB)
+
+        print(nextB)
+        print(res['n_tx'])
+        print(len(res['tx']))
+        print(temp)
+        temp+=1
+
+
 def parseAddress():
     pass
 
@@ -93,6 +110,7 @@ def trackAddress(h, maxTraverse = 0, fullResult = [], t = 'rawaddr'):
     for index, item in enumerate(res['txs']):
         ti.append(parseTransaction(item['inputs']))
         to.append(parseTransaction(item['out']))
+        
         print(h, index, numTrans)
 
     fullResult.append(ti)
@@ -103,22 +121,8 @@ def trackAddress(h, maxTraverse = 0, fullResult = [], t = 'rawaddr'):
     else:
         return trackAddress(h, maxTraverse-1)   
 
-# h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
-# tempRes=trackAddress(h)
-# print(tempRes, len(tempRes))
-
-res = buildCall('rawblock', '000000000000000000123416369bded17411745b6bb42dcdf8d9b51cb414386c')
-
-temp = 0
-
-while  temp < 50:
-    nextB = res['prev_block']
-    
-    res = buildCall('rawblock', nextB)
+h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
+tempRes=trackAddress(h)
 
 
-    print(nextB)
-    print(res['n_tx'])
-    print(len(res['tx']))
-    print(temp)
-    temp+=1
+print(tempRes, len(tempRes))
