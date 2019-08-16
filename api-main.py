@@ -150,13 +150,13 @@ def inputOutputAddress(h):
 
     for tx in transactions:
         currentTX = BTCTx(tx['hash'])
-        print(currentTc.hash)
-        currentTx.blockIndex = tx['block_index']
-        currentTx.time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(tx['time'])))
-        currentTx.lhs = extractLedger(tx['inputs'])
-        currentTx.rhs = extractLedger(tx['out'])
+        print(currentTX.hash)
+        currentTX.blockIndex = tx['block_index']
+        currentTX.time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(tx['time'])))
+        currentTX.lhs = extractLedger(tx['inputs'])
+        currentTX.rhs = extractLedger(tx['out'])
 
-        allTrans.append(currentTx)
+        allTrans.append(currentTX)
 
     return allTrans
 
