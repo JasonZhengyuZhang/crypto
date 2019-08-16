@@ -127,8 +127,8 @@ class BTCTx:
         self.hash = hash
         self.blockIndex = None
         self.time = None
-        self.LHS = None
-        self.RHS = None
+        self.lhs = None
+        self.rhs = None
 
 def extractLedger(ledger):
     res=[]
@@ -150,10 +150,11 @@ def inputOutputAddress(h):
 
     for tx in transactions:
         currentTX = BTCTx(tx['hash'])
+        print(currentTc.hash)
         currentTx.blockIndex = tx['block_index']
         currentTx.time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(tx['time'])))
-        currentTx.LHS = extractLedger(tx['inputs'])
-        currentTx.RHS = extractLedger(tx['out'])
+        currentTx.lhs = extractLedger(tx['inputs'])
+        currentTx.rhs = extractLedger(tx['out'])
 
         allTrans.append(currentTx)
 
