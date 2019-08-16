@@ -133,6 +133,7 @@ class BTCTx:
 def extractLedger(ledger):
     res=[]
     for row in ledger:
+        print(row)
         temp = {
                 'address': row['addr'],
                 'value': row['value']/100000000
