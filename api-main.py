@@ -142,7 +142,7 @@ def extractLedger(ledger):
     return res 
 
 def inputOutputAddress(h):
-    res = buildCall(t, h)
+    res = buildCall('rawaddr', h)
     transactions = res['txs']
     numTrans = len(transactions)
 
@@ -164,6 +164,7 @@ def identifyAddress(h, x=1):
     print(len(allTrans))
 
 
+
     # for tx in allTrans:
         
 
@@ -171,8 +172,10 @@ def identifyAddress(h, x=1):
         
 
 h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
-tempRes=identify(h)
+tempRes=identifyAddress(h)
 
 # h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
 # tempRes=trackAddress(h)
 # print(tempRes, len(tempRes))
+
+# fetchAllBlock()
