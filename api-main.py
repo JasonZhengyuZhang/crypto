@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 from anytree import Node, RenderTree
 
 
@@ -121,8 +122,57 @@ def trackAddress(h, maxTraverse = 0, fullResult = [], t = 'rawaddr'):
     else:
         return trackAddress(h, maxTraverse-1)   
 
+class BTCTx:
+    def __init__(self, hash):
+        self.hash = hash
+        self.blockIndex = None
+        self.time = None
+        self.LHS = None
+        self.RHS = None
+
+def extractLedger(ledger):
+    res=[]
+    for row in ledger:
+        temp = {
+                'address': row['addr'],
+                'value': row['value']/100000000
+            }
+        res.append(temp)
+
+    return res 
+
+def inputOutputAddress(h):
+    res = buildCall(t, h)
+    transactions = res['txs']
+    numTrans = len(transactions)
+
+    allTrans = []
+
+    for tx in transactions:
+        currentTX = BTCTx(tx['hash'])
+        currentTx.blockIndex = tx['block_index']
+        currentTx.time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(tx['time'])))
+        currentTx.LHS = extractLedger(tx['inputs'])
+        currentTx.RHS = extractLedger(tx['out'])
+
+        allTrans.append(currentTx)
+
+    return allTrans
+
+def identifyAddress(h, x=1):
+    allTrans = inputOutputAddress(h)
+    print(len(allTrans))
+
+
+    # for tx in allTrans:
+        
+
+
+        
+
 h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
-tempRes=trackAddress(h)
+tempRes=identify(h)
 
-
-print(tempRes, len(tempRes))
+# h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
+# tempRes=trackAddress(h)
+# print(tempRes, len(tempRes))
