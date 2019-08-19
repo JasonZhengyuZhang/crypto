@@ -130,10 +130,10 @@ class BTCTx:
         self.lhs = None
         self.rhs = None
 
-def extractLedger(ledger):
+def extractLedger(ledger, ver):
     res=[]
     for row in ledger:
-        print(row)
+        addr = row['addr'] if ver==1 else row['prev_out']['addr']
         temp = {
                 'address': row['addr'],
                 'value': row['value']/100000000
@@ -150,26 +150,30 @@ def inputOutputAddress(h):
     allTrans = []
 
     for tx in transactions:
-        currentTX = BTCTx(tx['hash'])
-        print(currentTX.hash)
+        tVer = 1 if tx['ver']==1 else 2
+
+        currentTX = BTCTx(tx['hash'])        
         currentTX.blockIndex = tx['block_index']
         currentTX.time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(tx['time'])))
-        currentTX.lhs = extractLedger(tx['inputs'])
-        currentTX.rhs = extractLedger(tx['out'])
+        currentTX.lhs = extractLedger(tx['inputs'], tVer)
+        currentTX.rhs = extractLedger(tx['out'], tVer)
 
         allTrans.append(currentTX)
 
     return allTrans
 
-def identifyAddress(h, x=1):
+def identifyAddress(h):
     allTrans = inputOutputAddress(h)
-    print(len(allTrans))
+    
+    # allTrans is a list of Trans Object
 
+    # I should loop through allTrans and then for each individual Traansaction
+    # object and then   
 
-
-    # for tx in allTrans:
-        
-
+    for tx in allTrans:
+        print(tx)
+        print(tx.hash)
+        print(tx.lhs)
 
         
 
@@ -179,5 +183,4 @@ tempRes=identifyAddress(h)
 # h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
 # tempRes=trackAddress(h)
 # print(tempRes, len(tempRes))
-
 # fetchAllBlock()
