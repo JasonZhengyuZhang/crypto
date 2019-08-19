@@ -130,13 +130,14 @@ class BTCTx:
         self.lhs = None
         self.rhs = None
 
-def extractLedger(ledger, ver):
+def extractLedger(ledger, side):
     res=[]
     for row in ledger:
-        addr = row['addr'] if ver==1 else row['prev_out']['addr']
+        addr = row['prev_out']['addr'] if side==0 else row['addr']
+        value = row['prev_out']['value'] if side==0 else row['value']
         temp = {
-                'address': row['addr'],
-                'value': row['value']/100000000
+                'address': addr,
+                'value': value/100000000
             }
         res.append(temp)
 
@@ -150,13 +151,13 @@ def inputOutputAddress(h):
     allTrans = []
 
     for tx in transactions:
-        tVer = 1 if tx['ver']==1 else 2
+        # tVer = 1 if tx['ver']==1 else 2
 
         currentTX = BTCTx(tx['hash'])        
         currentTX.blockIndex = tx['block_index']
         currentTX.time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(tx['time'])))
-        currentTX.lhs = extractLedger(tx['inputs'], tVer)
-        currentTX.rhs = extractLedger(tx['out'], tVer)
+        currentTX.lhs = extractLedger(tx['inputs'], 0)
+        currentTX.rhs = extractLedger(tx['out'], 1)
 
         allTrans.append(currentTX)
 
