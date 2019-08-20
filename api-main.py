@@ -39,9 +39,10 @@ def call(req):
     print(req, response.status_code)
     return response.json()
 
-def buildCall(t, h):
-    try:
-        endpoint = 'https://blockchain.info/'+t+'/'+h
+def buildCall(t, h, offset=0):
+    try
+        parameters = ''.join(['?offset=', offset]) if offset!=0 else ''
+        endpoint = 'https://blockchain.info/'+t+'/'+h+parameters
         res = call(endpoint)
         return res
     except Exception as e:
@@ -133,8 +134,16 @@ class BTCTx:
 def extractLedger(ledger, side):
     res=[]
     for row in ledger:
-        addr = row['prev_out']['addr'] if side==0 else row['addr']
-        value = row['prev_out']['value'] if side==0 else row['value']
+        try:
+            addr = row['prev_out']['addr'] if side==0 else row['addr']
+        except: 
+            addr = 'Newly Generated Coins' if side==0 else 'Unable to decode address'
+
+        try:
+            value = row['prev_out']['value'] if side==0 else row['value']
+        except:
+            value = 'Unable to decode'
+
         temp = {
                 'address': addr,
                 'value': value/100000000
@@ -143,25 +152,30 @@ def extractLedger(ledger, side):
 
     return res 
 
-def inputOutputAddress(h):
-    res = buildCall('rawaddr', h)
-    transactions = res['txs']
-    numTrans = len(transactions)
+def inputOutputAddress(h, offset=0, newTxOffset=0, TxHashes=[], val=[]):
+    # the applications first check will be to call on offset with whatever
+    # the current value is, it wil then check whether the number of transactions
+    # from thr result is equal to the current number of elements in TxHashes
 
-    allTrans = []
+    # call the hash and offset by how much, starts at 0
+    res = buildCall('rawaddr', h, offset)
+    # the total number of transactions that is currently on the api call
+    numTrans = res['n_tx']
 
-    for tx in transactions:
-        # tVer = 1 if tx['ver']==1 else 2
+    if len(val) == numTrans:
+        return val
+    else:
+        transactions = res['n_tx']
+        for tx in transactions:
+            currentTx = BTCTx(tx['hash'])
+            currentTx.blockIndex = tx['block_index']
+            currentTX.time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(tx['time'])))
+            currentTX.lhs = extractLedger(tx['inputs'], 0)
+            currentTX.rhs = extractLedger(tx['out'], 1)
 
-        currentTX = BTCTx(tx['hash'])        
-        currentTX.blockIndex = tx['block_index']
-        currentTX.time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(tx['time'])))
-        currentTX.lhs = extractLedger(tx['inputs'], 0)
-        currentTX.rhs = extractLedger(tx['out'], 1)
-
-        allTrans.append(currentTX)
-
-    return allTrans
+            val.append(currentTX)
+        
+        return inputOutputAddress(h, offset+50, 0, [], val)
 
 def identifyAddress(h):
     allTrans = inputOutputAddress(h)
