@@ -2,7 +2,8 @@ import requests
 import json
 import time
 from anytree import Node, RenderTree
-
+from flask import Flask
+app = Flask(__name__)
 
 bitpay = [
     "https://insight.bitpay.com/api/address/1KEkZ1LXj4VpohS6ZN1tHouW8r9yja5gbP",
@@ -40,8 +41,8 @@ def call(req):
     return response.json()
 
 def buildCall(t, h, offset=0):
-    try
-        parameters = ''.join(['?offset=', offset]) if offset!=0 else ''
+    try:
+        parameters = ''.join(['?offset=', str(offset)]) if offset!=0 else ''
         endpoint = 'https://blockchain.info/'+t+'/'+h+parameters
         res = call(endpoint)
         return res
@@ -165,10 +166,10 @@ def inputOutputAddress(h, offset=0, newTxOffset=0, TxHashes=[], val=[]):
     if len(val) == numTrans:
         return val
     else:
-        transactions = res['n_tx']
+        transactions = res['txs']
         for tx in transactions:
-            currentTx = BTCTx(tx['hash'])
-            currentTx.blockIndex = tx['block_index']
+            currentTX = BTCTx(tx['hash'])
+            currentTX.blockIndex = tx['block_index']
             currentTX.time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(tx['time'])))
             currentTX.lhs = extractLedger(tx['inputs'], 0)
             currentTX.rhs = extractLedger(tx['out'], 1)
@@ -183,17 +184,31 @@ def identifyAddress(h):
     # allTrans is a list of Trans Object
 
     # I should loop through allTrans and then for each individual Traansaction
-    # object and then   
+    # object and then figure out all the unique address, 
+
+    nodes = []
+    edges = []
+
+    id=0:
 
     for tx in allTrans:
-        print(tx)
-        print(tx.hash)
-        print(tx.lhs)
+        node = {
+            'id': id,
+            'label': tx.hash
+        }
+        nodes.append(node)
 
+        edge = {
+            'from': sd
+        }
         
 
-h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
-tempRes=identifyAddress(h)
+# h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
+# tempRes=identifyAddress(h)
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
 
 # h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
 # tempRes=trackAddress(h)
