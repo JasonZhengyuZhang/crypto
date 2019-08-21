@@ -2,7 +2,7 @@ import requests
 import json
 import time
 from anytree import Node, RenderTree
-from flask import Flask
+from flask import Flask, jsonify, request, render_template
 app = Flask(__name__)
 
 bitpay = [
@@ -189,7 +189,7 @@ def identifyAddress(h):
     nodes = []
     edges = []
 
-    id=0:
+    id=0
 
     for tx in allTrans:
         node = {
@@ -208,7 +208,7 @@ def identifyAddress(h):
 
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return render_template('index.html')
 
 # h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
 # tempRes=trackAddress(h)
