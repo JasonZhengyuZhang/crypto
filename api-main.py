@@ -210,6 +210,11 @@ def identifyAddress(h):
 def hello_world():
     return render_template('index.html')
 
+
+
+if __name__ == '__main__':
+    app.run(host= '0.0.0.0')
+
 # h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
 # tempRes=trackAddress(h)
 # print(tempRes, len(tempRes))
