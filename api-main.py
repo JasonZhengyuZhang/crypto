@@ -5,17 +5,47 @@ from anytree import Node, RenderTree
 from flask import Flask, jsonify, request, render_template
 app = Flask(__name__)
 
-bitpay = [
-    "https://insight.bitpay.com/api/address/1KEkZ1LXj4VpohS6ZN1tHouW8r9yja5gbP",
-    "https://insight.bitpay.com/api//tx/7eaac3e74c906fa6376fbdfa732f0c1a079d5e20554a13d46845ef063c7afe12",
-    "https://insight.bitpay.com/api/block/0000000000000000001454d34ff552b26be18199dc80d4ed3bdeec439e4bf5c8"
-]
+# bitpay = [
+#     "https://insight.bitpay.com/api/address/1KEkZ1LXj4VpohS6ZN1tHouW8r9yja5gbP",
+#     "https://insight.bitpay.com/api//tx/7eaac3e74c906fa6376fbdfa732f0c1a079d5e20554a13d46845ef063c7afe12",
+#     "https://insight.bitpay.com/api/block/0000000000000000001454d34ff552b26be18199dc80d4ed3bdeec439e4bf5c8"
+# ]
 
-blockchain = [
-    "https://blockchain.info/rawblock/0000000000000bae09a7a393a8acded75aa67e46cb81f7acaa5ad94f9eacd103",
-    "https://blockchain.info/rawtx/b6f6991d03df0e2e04dafffcd6bc418aac66049e2cd74b80f14ac86db1e3f0da",
-    "https://blockchain.info/rawaddr/1AJbsFZ64EpEfS5UAjAfcUG8pH8Jn3rn1F"
-]
+# blockchain = [
+#     "https://blockchain.info/rawblock/0000000000000bae09a7a393a8acded75aa67e46cb81f7acaa5ad94f9eacd103",
+#     "https://blockchain.info/rawtx/b6f6991d03df0e2e04dafffcd6bc418aac66049e2cd74b80f14ac86db1e3f0da",
+#     "https://blockchain.info/rawaddr/1AJbsFZ64EpEfS5UAjAfcUG8pH8Jn3rn1F"
+# ]
+
+# def identifyAddress(h):
+#     allTrans = inputOutputAddress(h)
+    
+#     # allTrans is a list of Trans Object
+
+#     # I should loop through allTrans and then for each individual Traansaction
+#     # object and then figure out all the unique address, 
+
+#     nodes = []
+#     edges = []
+
+#     id=0
+
+#     If you want fresh rice, you 
+
+#     for tx in allTrans:
+#         node = {
+#             'id': id,
+#             'label': tx.hash
+#         }
+#         nodes.append(node)
+
+#         edge = {
+#             'from': sd
+#         }
+        
+# @app.route('/')
+# def hello_world():
+#     return render_template('index.html')
 
 # def trackTransaction(t, h):
 #     # parse the transaction for all input and all output
@@ -178,44 +208,15 @@ def inputOutputAddress(h, offset=0, newTxOffset=0, TxHashes=[], val=[]):
         
         return inputOutputAddress(h, offset+50, 0, [], val)
 
-def identifyAddress(h):
-    allTrans = inputOutputAddress(h)
-    
-    # allTrans is a list of Trans Object
-
-    # I should loop through allTrans and then for each individual Traansaction
-    # object and then figure out all the unique address, 
-
-    nodes = []
-    edges = []
-
-    id=0
-
-    for tx in allTrans:
-        node = {
-            'id': id,
-            'label': tx.hash
-        }
-        nodes.append(node)
-
-        edge = {
-            'from': sd
-        }
-        
-
-# h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
-# tempRes=identifyAddress(h)
-
-@app.route('/')
-def hello_world():
-    return render_template('index.html')
-
-
-
 if __name__ == '__main__':
-    app.run(host= '0.0.0.0', port=80)
+    # app.run(host= '0.0.0.0', port=80)
 
-# h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
-# tempRes=trackAddress(h)
-# print(tempRes, len(tempRes))
-# fetchAllBlock()
+    # fetchAllBlock()
+
+    # h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
+    # tempRes=identifyAddress(h)
+
+    h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
+    tempRes=trackAddress(h)
+    print(tempRes, len(tempRes))
+    
