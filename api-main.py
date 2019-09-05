@@ -64,7 +64,9 @@ app = Flask(__name__)
 #     else:
 #         print('failed to call', res)
 #         return 
-    
+
+# def parseBlock():
+#     pass
 def call(req):
     response = requests.get(req)
     print(req, response.status_code)
@@ -78,9 +80,6 @@ def buildCall(t, h, offset=0):
         return res
     except Exception as e:
         return e
-
-def parseBlock():
-    pass
 
 def fetchAllBlock():
     res = buildCall('rawblock', '000000000000000000123416369bded17411745b6bb42dcdf8d9b51cb414386c')
@@ -97,10 +96,6 @@ def fetchAllBlock():
         print(len(res['tx']))
         print(temp)
         temp+=1
-
-
-def parseAddress():
-    pass
 
 def parseTransaction(transaction):
     res = {}
@@ -218,5 +213,7 @@ if __name__ == '__main__':
 
     h = "1FzWLkAahHooV3kzTgyx6qsswXJ6sCXkSR"
     tempRes=trackAddress(h)
-    print(tempRes, len(tempRes))
+    # print(tempRes, len(tempRes))
+    tempRes2=inputOutputAddress(h)
+    print(tempRes2)
     
